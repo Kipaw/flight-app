@@ -30,7 +30,7 @@ export default async function NavbarAuth() {
         </Link>
       )}
 
-      {user && <SignOutButton />}
+      {user && <SignOutButton iconOnly />}
     </div>
   );
 }

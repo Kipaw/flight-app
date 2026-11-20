@@ -9,6 +9,16 @@
   --color-upwego-light-purple: #b88dff;
   --color-upwego-off-purple: #b9b3c9;
   --color-upwego-red: #ef4444;
+  --color-upwego-bg-purple: #1f1a35;
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
 }
 
 @theme inline {
