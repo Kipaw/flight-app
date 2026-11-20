@@ -6,7 +6,7 @@ import Sidebar from "../../../components/dashboard/sidebar";
 async function AuthGuard({ children }: { children: React.ReactNode }) {
   const user = await getUser();
 
-  if (!user) redirect("/dashboard/signin");
+  if (!user) redirect("/sign-in");
   if (user.role !== "ADMIN") redirect("/");
 
   return (

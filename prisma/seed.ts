@@ -1,8 +1,9 @@
 import "dotenv/config";
 import { auth } from "../lib/auth";
 import { prisma } from "../lib/prisma";
+import { generateSeats } from "../lib/seats";
 
-async function main() {
+async function seedAdmin() {
   const email = "admin@mail.com";
 
   const exists = await prisma.user.findUnique({ where: { email } });
@@ -15,7 +16,7 @@ async function main() {
   const hash = await ctx.password.hash("admin123");
   const id = crypto.randomUUID();
 
-  const user = await prisma.user.create({
+  await prisma.user.create({
     data: {
       id,
       name: "Admin",
@@ -32,8 +33,146 @@ async function main() {
       },
     },
   });
+  console.log("Admin dibuat:", email);
+}
 
-  console.log({ user });
+const airplanes = [
+  {
+    code: "SA-101",
+    name: "Singa Air",
+    image: "/uploads/airplanes/singa-air.png",
+  },
+  {
+    code: "GA-202",
+    name: "Garuda Nusantara",
+    image: "/uploads/airplanes/garuda-nusantara.png",
+  },
+  {
+    code: "LA-303",
+    name: "Lion Wings",
+    image: "/uploads/airplanes/lion-wings.png",
+  },
+  {
+    code: "BA-404",
+    name: "Batik Jet",
+    image: "/uploads/airplanes/batik-jet.png",
+  },
+];
+
+async function seedAirplanes() {
+  let created = 0;
+  for (const plane of airplanes) {
+    const exists = await prisma.airplane.findFirst({
+      where: { code: plane.code },
+    });
+    if (!exists) {
+      await prisma.airplane.create({ data: plane });
+      created++;
+    }
+  }
+  console.log(`Airplane: ${created} baru`);
+}
+
+// Jam ditulis WIB (+07:00) supaya tidak bergeser
+const flights = [
+  {
+    planeCode: "SA-101",
+    departureCity: "Semarang",
+    departureCityCode: "SMG",
+    departureDate: "2026-12-05T06:03:00+07:00",
+    destinationCity: "Surabaya",
+    destinationCityCode: "SBY",
+    arrivalDate: "2026-12-05T07:03:00+07:00",
+    price: 1_200_000,
+  },
+  {
+    planeCode: "SA-101",
+    departureCity: "Semarang",
+    departureCityCode: "SMG",
+    departureDate: "2026-12-06T02:24:00+07:00",
+    destinationCity: "Surabaya",
+    destinationCityCode: "SBY",
+    arrivalDate: "2026-12-06T08:24:00+07:00",
+    price: 950_000,
+  },
+  {
+    planeCode: "GA-202",
+    departureCity: "Jakarta",
+    departureCityCode: "CGK",
+    departureDate: "2026-12-07T09:30:00+07:00",
+    destinationCity: "Denpasar",
+    destinationCityCode: "DPS",
+    arrivalDate: "2026-12-07T12:15:00+07:00",
+    price: 1_800_000,
+  },
+  {
+    planeCode: "LA-303",
+    departureCity: "Bandung",
+    departureCityCode: "BDO",
+    departureDate: "2026-12-08T13:00:00+07:00",
+    destinationCity: "Makassar",
+    destinationCityCode: "UPG",
+    arrivalDate: "2026-12-08T16:10:00+07:00",
+    price: 2_100_000,
+  },
+  {
+    planeCode: "BA-404",
+    departureCity: "Yogyakarta",
+    departureCityCode: "YIA",
+    departureDate: "2026-12-09T18:45:00+07:00",
+    destinationCity: "Medan",
+    destinationCityCode: "KNO",
+    arrivalDate: "2026-12-09T21:30:00+07:00",
+    price: 2_400_000,
+  },
+];
+
+async function seedFlights() {
+  let created = 0;
+
+  for (const { planeCode, departureDate, arrivalDate, ...rest } of flights) {
+    const plane = await prisma.airplane.findFirst({
+      where: { code: planeCode },
+    });
+    if (!plane) continue;
+
+    const data = {
+      ...rest,
+      planeId: plane.id,
+      departureDate: new Date(departureDate),
+      arrivalDate: new Date(arrivalDate),
+    };
+
+    const exists = await prisma.flight.findFirst({
+      where: { planeId: data.planeId, departureDate: data.departureDate },
+    });
+    if (exists) continue;
+
+    await prisma.flight.create({
+      data: { ...data, seats: { createMany: { data: generateSeats() } } },
+    });
+    created++;
+  }
+  console.log(`Flight: ${created} baru`);
+
+  // Flight yang sudah ada tapi belum punya kursi (misalnya dari seed lama)
+  const empty = await prisma.flight.findMany({
+    where: { seats: { none: {} } },
+    select: { id: true },
+  });
+  for (const { id } of empty) {
+    await prisma.flightSeat.createMany({
+      data: generateSeats().map((seat) => ({ ...seat, flightId: id })),
+    });
+  }
+  if (empty.length)
+    console.log(`Kursi ditambahkan ke ${empty.length} flight lama`);
+}
+
+async function main() {
+  await seedAdmin();
+  await seedAirplanes();
+  await seedFlights();
 }
 
 main()

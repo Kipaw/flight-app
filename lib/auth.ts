@@ -5,7 +5,10 @@ import { prisma } from "@/lib/prisma";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
-  emailAndPassword: { enabled: true },
+  emailAndPassword: {
+    enabled: true,
+    autoSignIn: false, // setelah daftar, user harus login manual
+  },
   user: {
     additionalFields: {
       role: { type: "string", defaultValue: "CUSTOMER", input: false },

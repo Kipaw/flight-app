@@ -4,6 +4,13 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --color-upwego-black: #080318;
+  --color-upwego-light-purple: #b88dff;
+  --color-upwego-off-purple: #b9b3c9;
+  --color-upwego-red: #ef4444;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { generateSeats } from "@/lib/seats";
 import type { ActionResult } from "@/lib/types";
 import { formFlightSchema } from "./validation";
 
@@ -35,8 +36,9 @@ export async function saveFlight(
   if (!data) return result!;
 
   try {
-    await prisma.flight.create({ data });
-    // TODO: generate FlightSeat (butuh model FlightSeat)
+    await prisma.flight.create({
+      data: { ...data, seats: { createMany: { data: generateSeats() } } },
+    });
   } catch (e) {
     console.error(e);
     return {
@@ -72,10 +74,16 @@ export async function updateFlight(
 }
 
 export async function deleteFlight(id: string) {
+  const sold = await prisma.ticket.count({ where: { flightId: id } });
+  if (sold > 0) {
+    return { error: "Flight ini sudah punya tiket, tidak bisa dihapus." };
+  }
+
   await prisma.$transaction([
     prisma.flightSeat.deleteMany({ where: { flightId: id } }),
     prisma.flight.delete({ where: { id } }),
   ]);
 
   revalidatePath("/dashboard/flights");
+  return { error: null };
 }

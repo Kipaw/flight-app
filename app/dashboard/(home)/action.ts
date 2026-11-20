@@ -6,5 +6,5 @@ import { auth } from "@/lib/auth";
 
 export async function logout() {
   await auth.api.signOut({ headers: await headers() });
-  redirect("/dashboard/signin");
+  redirect("/sign-in");
 }

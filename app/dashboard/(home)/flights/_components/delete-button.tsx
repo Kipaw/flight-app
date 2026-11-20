@@ -15,7 +15,10 @@ export default function DeleteButton({ id }: { id: string }) {
       disabled={isPending}
       onClick={() => {
         if (!confirm("Hapus flight ini?")) return;
-        startTransition(() => deleteFlight(id));
+        startTransition(async () => {
+          const res = await deleteFlight(id);
+          if (res?.error) alert(res.error);
+        });
       }}
     >
       <Trash className="mr-2 h-4 w-4" />

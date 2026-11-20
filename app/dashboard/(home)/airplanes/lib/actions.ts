@@ -19,7 +19,7 @@ const EXT: Record<string, string> = {
 
 async function requireAdmin() {
   const user = await getUser();
-  if (!user || user.role !== "ADMIN") redirect("/dashboard/signin");
+  if (!user || user.role !== "ADMIN") redirect("/sign-in");
 }
 
 function fail(...desc: string[]): ActionResult {

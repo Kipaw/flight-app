@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -43,3 +44,16 @@ next-env.d.ts
 # prisma
 /generated/prisma
 /lib/generated/prisma
+
+# project
+structure.txt
+.agents/
+.claude/
+.windsurf/
+
+# uploads (foto hasil upload tidak ikut repo, folder tetap ada)
+/public/uploads/*
+!/public/uploads/.gitkeep
+!/public/uploads/airplanes/
+/public/uploads/airplanes/*
+!/public/uploads/airplanes/.gitkeep
