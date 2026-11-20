@@ -282,9 +282,36 @@ app
         (home)
             _components
                 signout-button.tsx
+                submit-form-button.tsx
             airplanes
                 _components
                     columns-table.tsx
+                    delete-button.tsx
+                    form-airplane.tsx
+                create
+                    page.tsx
+                edit
+                    [id]
+                        page.tsx
+                lib
+                    actions.ts
+                    data.ts
+                page.tsx
+            flights
+                _components
+                    form-flight.tsx
+                api
+                    flights
+                        route.ts
+                create
+                    page.tsx
+                edit
+                    [id]
+                        page.tsx
+                lib
+                    actions.ts
+                    validation.ts
+                layout.tsx
                 page.tsx
             action.ts
             layout.tsx
@@ -299,8 +326,15 @@ components
     ui
         badge.tsx
         button.tsx
+        data-table.tsx
         input.tsx
+        label.tsx
+        select.tsx
+        skeleton.tsx
         table.tsx
+    navbar.tsx
+    navbar-auth.tsx
+    signout-button.tsx
 lib
     generated
         prisma
@@ -326,6 +360,7 @@ lib
     auth-client.ts
     get-user.ts
     prisma.ts
+    types.ts
     utils.ts
 prisma
     migrations
@@ -337,11 +372,6 @@ prisma
     schema.prisma
     seed.ts
 public
-    file.svg
-    globe.svg
-    next.svg
-    vercel.svg
-    window.svg
 .env
 .gitignore
 AGENTS.md

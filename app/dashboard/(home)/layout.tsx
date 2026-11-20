@@ -13,7 +13,7 @@ async function AuthGuard({ children }: { children: React.ReactNode }) {
     <section>
       <nav className="border-b border-muted p-5">
         <div className="flex flex-row items-center justify-between">
-          <span className="font-bold text-primary">FlySha Dashboard</span>
+          <span className="font-bold text-primary">Upwego Dashboard</span>
           <span className="text-sm text-muted-foreground">{user.email}</span>
         </div>
       </nav>

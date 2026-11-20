@@ -7,7 +7,7 @@ import {
   LayoutDashboard,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import SignOutButton from "../../app/dashboard/(home)/_components/signout-button";
+import SignOutButton from "@/components/signout-button";
 
 type Item = { href: string; label: string; icon: React.ElementType };
 
