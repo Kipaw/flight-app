@@ -155,18 +155,26 @@ async function seedFlights() {
   }
   console.log(`Flight: ${created} baru`);
 
-  // Flight yang sudah ada tapi belum punya kursi (misalnya dari seed lama)
-  const empty = await prisma.flight.findMany({
-    where: { seats: { none: {} } },
-    select: { id: true },
+  // Samakan susunan kursi flight lama (hanya yang belum punya tiket)
+  const expected = generateSeats().length;
+  const outdated = await prisma.flight.findMany({
+    where: { tickets: { none: {} } },
+    select: { id: true, _count: { select: { seats: true } } },
   });
-  for (const { id } of empty) {
-    await prisma.flightSeat.createMany({
-      data: generateSeats().map((seat) => ({ ...seat, flightId: id })),
-    });
+
+  let resynced = 0;
+  for (const flight of outdated) {
+    if (flight._count.seats === expected) continue;
+
+    await prisma.$transaction([
+      prisma.flightSeat.deleteMany({ where: { flightId: flight.id } }),
+      prisma.flightSeat.createMany({
+        data: generateSeats().map((seat) => ({ ...seat, flightId: flight.id })),
+      }),
+    ]);
+    resynced++;
   }
-  if (empty.length)
-    console.log(`Kursi ditambahkan ke ${empty.length} flight lama`);
+  if (resynced) console.log(`Kursi disamakan di ${resynced} flight lama`);
 }
 
 async function main() {

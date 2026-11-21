@@ -10,6 +10,8 @@
   --color-upwego-off-purple: #b9b3c9;
   --color-upwego-red: #ef4444;
   --color-upwego-bg-purple: #1f1a35;
+  --color-upwego-dark-grey: #3b3748;
+  --color-upwego-grey: #a0a0ac;
 }
 
 @keyframes slide {
