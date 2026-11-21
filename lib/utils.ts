@@ -29,6 +29,10 @@ export const dateFormat = (
         hour: "2-digit",
         minute: "2-digit",
         hour12: false,
+        timeZone: "Asia/Jakarta",
       }).format(d)
-    : new Intl.DateTimeFormat("en-GB", { dateStyle: "medium" }).format(d);
+    : new Intl.DateTimeFormat("en-GB", {
+        dateStyle: "medium",
+        timeZone: "Asia/Jakarta",
+      }).format(d);
 };

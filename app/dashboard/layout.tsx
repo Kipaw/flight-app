@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { getUser } from "@/lib/get-user";
-import Sidebar from "../../../components/dashboard/sidebar";
+import Sidebar from "@/components/dashboard/sidebar";
 
 async function AuthGuard({ children }: { children: React.ReactNode }) {
   const user = await getUser();
