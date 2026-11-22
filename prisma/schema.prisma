@@ -94,6 +94,9 @@ model FlightSeat {
   isBooked   Boolean? @default(false)
   type       TypeSeat
   ticket     Ticket?
+
+  @@unique([flightId, type, seatNumber])
+  @@index([flightId])
 }
 
 model Ticket {

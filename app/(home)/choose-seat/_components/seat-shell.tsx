@@ -17,8 +17,8 @@ export default function SeatShell({
       id="Choose-Seat"
       className="container mx-auto flex min-h-screen flex-col items-center justify-between pt-10 sm:w-[904px] sm:flex-row sm:items-start sm:pb-0"
     >
-      <div className="flex h-[calc(100vh-40px)] items-end">
-        <div className="relative flex w-[409px] shrink-0 overflow-visible">
+      <div className="flex min-h-[calc(100vh-40px)] items-end sm:self-stretch">
+        <div className="relative isolate flex w-[409px] shrink-0 overflow-visible">
           <div className="plane-body absolute bottom-0 overflow-x-hidden sm:overflow-visible">
             <img
               src="/assets/images/background/plane-body.svg"
@@ -30,7 +30,8 @@ export default function SeatShell({
               className="absolute top-[18px] left-1/2 z-10 -translate-x-1/2 transform"
               alt=""
             />
-            <div className="absolute bottom-0 left-[54%] -z-10 flex w-[927px] shrink-0 -translate-x-1/2 transform justify-center">
+            {/* Sayap tetap di dalam plane-body supaya bottom-0 menempel ke dasar badan */}
+            <div className="pointer-events-none absolute bottom-0 left-[54%] -z-10 flex w-[927px] shrink-0 -translate-x-1/2 transform justify-center">
               <img
                 src="/assets/images/background/plane-wings.svg"
                 className="w-[927px]"
@@ -54,7 +55,8 @@ export default function SeatShell({
           </div>
         </div>
       </div>
-      {detail}
+
+      <div className="relative z-10">{detail}</div>
     </section>
   );
 }

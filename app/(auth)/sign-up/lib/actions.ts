@@ -37,5 +37,5 @@ export async function signUpUser(
     };
   }
 
-  redirect("/auth/sign-in");
+  redirect("/sign-in");
 }

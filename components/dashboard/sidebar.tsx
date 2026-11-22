@@ -48,7 +48,7 @@ function NavGroup({ title, items }: { title?: string; items: Item[] }) {
 
 export default function Sidebar() {
   return (
-    <aside className="grow-0 w-[20%] min-h-[calc(100vh-73px)] shadow p-5 flex flex-col justify-between">
+    <aside className="sticky top-[73px] h-[calc(100vh-73px)] w-[20%] shrink-0 overflow-y-auto shadow p-5 flex flex-col justify-between">
       <div className="space-y-5">
         <NavGroup items={main} />
         <NavGroup title="Master Data" items={masterData} />
